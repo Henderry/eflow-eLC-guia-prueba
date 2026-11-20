@@ -1,0 +1,53 @@
+name: Temporary eLC guide contact sheets
+on:
+  push:
+    branches:
+      - inspect-elc-word
+permissions:
+  contents: write
+jobs:
+  contacts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Create contact sheets
+        run: |
+          python -m pip install --quiet pillow
+          python - <<'PY'
+          from PIL import Image, ImageOps, ImageDraw
+          from pathlib import Path
+          import base64, io, re
+
+          files = sorted(Path("eLC-source-media").glob("image*"),
+                         key=lambda p: int(re.search(r"(\d+)", p.stem).group(1)))
+          out = Path("eLC-contact-sheets")
+          out.mkdir(exist_ok=True)
+          thumb_w, thumb_h = 360, 260
+          cols, per_sheet = 3, 12
+          for start in range(0, len(files), per_sheet):
+              subset = files[start:start+per_sheet]
+              rows = (len(subset)+cols-1)//cols
+              canvas = Image.new("RGB", (cols*thumb_w, rows*(thumb_h+32)), "white")
+              draw = ImageDraw.Draw(canvas)
+              for j, path in enumerate(subset):
+                  im = Image.open(path).convert("RGB")
+                  im.thumbnail((thumb_w-12, thumb_h-12))
+                  x = (j%cols)*thumb_w + (thumb_w-im.width)//2
+                  y = (j//cols)*(thumb_h+32) + 4
+                  canvas.paste(im,(x,y))
+                  draw.text(((j%cols)*thumb_w+8,(j//cols)*(thumb_h+32)+thumb_h+4),path.name,fill="black")
+              buf=io.BytesIO()
+              canvas.save(buf,format="JPEG",quality=68,optimize=True)
+              name=f"contact-{start+1:02d}-{start+len(subset):02d}.jpg"
+              (out/(name+".b64")).write_text(base64.b64encode(buf.getvalue()).decode("ascii"),encoding="ascii")
+              print(name,len(buf.getvalue()))
+          (out/"README.txt").write_text(f"{len(files)} embedded images. Each .b64 file contains a JPEG contact sheet in base64.\n",encoding="utf-8")
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+users.noreply.github.com"
+          git add eLC-contact-sheets
+          git commit -m "Temporary: create eLC source contact sheets"
+          git push
