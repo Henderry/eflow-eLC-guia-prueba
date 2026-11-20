@@ -152,7 +152,6 @@ function paintProblemList() {
 
 const GLOSSARY_CAT_CLASS = {
   eLC: 'badge--blue',
-  eWMS: 'badge--violet',
   Logística: 'badge--cyan',
   Técnico: 'badge--dark',
   Integración: 'badge--amber',
@@ -201,7 +200,7 @@ function renderGlossary(param) {
       <div>
         <span class="eyebrow">${icon('alpha')} Conocimiento</span>
         <h1>Glosario</h1>
-        <p>${total} términos de eLC, eWMS y logística explicados en lenguaje de operación. Úsalo para traducir siglas y para alinear el vocabulario con el cliente.</p>
+        <p>${total} términos y siglas utilizados en eLC, sus procesos y su integración con SAP.</p>
       </div>
       <div class="head-actions">
         <button class="btn btn--outline" type="button" data-action="new-doubt">${icon('help')} Dudar de un término</button>
