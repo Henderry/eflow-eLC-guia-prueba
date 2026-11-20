@@ -94,10 +94,10 @@ window.ELC_DATA = {
         "Hay dudas abiertas de por qué no se validan coordenadas y por qué los buscadores no responden como se espera.",
     },
     {
-      title: "Palets bloqueados de Pastas Roma",
+      title: "Regla de almacenaje para palets bloqueados",
       area: "Almacenaje",
       detail:
-        "Se quiere almacenar palets bloqueados. Falta la regla de negocio y la validación con el cliente.",
+        "Se registró una solicitud relacionada con palets bloqueados. Falta confirmar la regla de negocio específica para el cliente y la versión de eLC.",
     },
     {
       title: "Comportamiento de ePacking por cliente",
