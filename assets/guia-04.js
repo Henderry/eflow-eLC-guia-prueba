@@ -32,8 +32,8 @@
           },
           {
             t: "note",
-            title: "Códigos heredados de eWMS",
-            x: "En el levantamiento con Bryan se mencionaron códigos de eWMS: TPCRRO (rotación), TPPRMI (presentación mínima), TPPRMA (presentación máxima), TPPRRE (cómo ingresa), TPPREX (cómo sale) y TPPRAL (cómo se maneja). Confirma cómo se muestran en eLC antes de usarlos como referencia oficial.",
+            title: "Nombres y valores de los campos",
+            x: "Utiliza los nombres y valores que aparezcan en la pantalla de Especialización SKU de la versión activa de eLC. Si un código interno no está explicado en la documentación del cliente, regístralo como pendiente y solicita validación antes de configurarlo.",
           },
           {
             t: "warn",
@@ -61,7 +61,7 @@
         blocks: [
           {
             t: "p",
-            x: "El Catálogo de layouts es el equivalente a Almacenamientos Ubicaciones de eWMS. Permite buscar una ubicación de un almacén y realizar configuraciones específicas sobre ella.",
+            x: "El Catálogo de layouts permite buscar ubicaciones de un almacén y consultar o modificar los datos que eLC expone para cada ubicación, según los permisos y la configuración del cliente.",
           },
           {
             t: "steps",
@@ -167,13 +167,13 @@
       {
         id: "operadores-roles",
         title: "Operadores y roles",
-        summary: "Usuarios, perfiles y roles con la misma lógica de recursos de eWMS.",
+        summary: "Administración de usuarios, perfiles y roles que intervienen en la operación de eLC.",
         tags: ["Configuración", "Seguridad", "Usuarios"],
         updated: "2026-11-20",
         blocks: [
           {
             t: "p",
-            x: "En Operadores & Roles se administran los usuarios, perfiles y roles. La lógica es muy parecida o casi igual a la de recursos de eWMS.",
+            x: "En Operadores & Roles se administran los usuarios, perfiles y roles utilizados para acceder a las funciones de eLC y del Hand Held. Los permisos efectivos deben comprobarse en la pantalla y versión habilitadas para cada cliente.",
           },
           {
             t: "p",
@@ -194,24 +194,15 @@
       {
         id: "reglas-compania",
         title: "Reglas de compañía y catálogo de artículos",
-        summary: "Los valores 60, 80, 75 y 50, el artículo fijo y las reglas que mandan en la configuración.",
+        summary: "Criterios que deben validarse en las reglas de compañía y en el catálogo de artículos.",
         tags: ["Configuración", "Reglas", "Catálogos"],
         updated: "2026-11-20",
         blocks: [
           {
             t: "p",
-            x: "Las reglas de compañía son prioritarias para cada configuración. En el levantamiento con Bryan se registraron los siguientes valores de referencia de eWMS; confirma su equivalencia exacta en eLC antes de usarlos como regla oficial.",
+            x: "Las reglas de compañía pueden afectar la configuración de una operación de eLC. La documentación disponible en este hub no establece una tabla universal de valores ni códigos válidos; cada ajuste debe verificarse en la instancia y versión del cliente.",
           },
           {
-            t: "table",
-            head: ["Valor", "Uso registrado"],
-            rows: [
-              ["60", "Rack picking."],
-              ["80", "Expedición."],
-              ["75", "Driving."],
-              ["50", "Block."],
-            ],
-          },
           {
             t: "kv",
             rows: [
@@ -222,8 +213,8 @@
           },
           {
             t: "warn",
-            title: "Referencia de levantamiento",
-            x: "Estos valores provienen de una reunión y de la lógica de eWMS. No los apliques a ciegas en eLC: valida con sistemas y con el cliente, y documenta la versión en la que aplican.",
+            title: "Valores por confirmar",
+            x: "No agregues valores de referencia a esta guía hasta contar con evidencia de la pantalla de eLC, el cliente, la versión y la aprobación del responsable de configuración.",
           },
           {
             t: "danger",
@@ -289,7 +280,7 @@
         blocks: [
           {
             t: "p",
-            x: "Cuando se genera una expedición y no aparecen acciones, revisa estas cinco causas antes de escalar. Están documentadas en las notas de operación de eLC y aplican también a la lógica heredada de eWMS.",
+            x: "Cuando una expedición aparece en eLC pero no se generan las acciones esperadas, revisa estas comprobaciones iniciales y registra qué evidencia respalda cada hallazgo. Las causas deben confirmarse en el cliente y la versión afectados.",
           },
           {
             t: "steps",
@@ -313,8 +304,8 @@
           },
           {
             t: "tip",
-            title: "Caso especial: SQL",
-            x: "En eWMS se usaba exec SPR_AUTO_GENERA_ACCIONES para generar acciones por SQL. No lo ejecutes en eLC sin confirmar que el procedimiento existe y que está autorizado para esa versión y ambiente.",
+            title: "Intervenciones técnicas",
+            x: "Esta guía no define consultas ni procedimientos SQL para forzar la generación de acciones en eLC. No ejecutes scripts ni modifiques la base de datos para corregir una incidencia sin un procedimiento técnico documentado y autorización para el ambiente correspondiente.",
           },
         ],
       },

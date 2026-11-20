@@ -9,38 +9,38 @@
     articles: [
       {
         id: "que-es-elc",
-        title: "Qué es eLC y qué cambia frente a eWMS",
-        summary: "eLC es la capa web de operación y control de eflow, con su propio Hand Held. No cambia la lógica del almacén: cambia dónde y cómo se opera.",
-        tags: ["Conceptos", "eWMS", "Torre de control"],
+        title: "Qué es eLC y cuál es su alcance",
+        summary: "Qué es eLC, cómo se integra con SAP y qué procesos específicos cubre.",
+        tags: ["Conceptos", "SAP", "Alcance de eLC"],
         updated: "2026-11-20",
         blocks: [
           {
             t: "p",
-            x: "eLC es la nueva generación de la operación eflow: una torre de control web para ver documentos, acciones y estados, más un Hand Held (HH) para ejecutar el trabajo físico en el almacén. En las fuentes se usa como sucesor operativo de las pantallas de eWMS, no como un sistema con otra lógica de negocio.",
+            x: "eLC es un complemento de SAP con capacidades de mini-WMS. Apoya procesos específicos de almacén mediante eLC Web y el Hand Held (HH). Su alcance se limita a los módulos, procesos e integraciones habilitados para cada cliente y documentados en esta guía; no debe tratarse como un WMS general ni como sustituto de SAP.",
           },
           {
             t: "p",
-            x: "La forma fácil de entenderlo: eWMS era un tablero con muchos interruptores separados; eLC es una torre de control que muestra el vuelo completo —documento, acción, recurso, inventario e integración— y desde ahí se asignan las tareas.",
+            x: "Piensa en eLC como una capa de apoyo conectada con SAP: muestra documentos, ayuda a coordinar algunos procesos del almacén y permite consultar resultados de las funciones habilitadas en cada operación.",
           },
-          { t: "h", x: "Equivalencias que más se usan" },
+          { t: "h", x: "Funciones documentadas dentro de eLC" },
           {
             t: "table",
-            head: ["En eWMS lo conocías como", "En eLC lo encuentras como", "Para qué sirve"],
+            head: ["Área de eLC", "Qué cubre según la guía", "Dónde interviene"],
             rows: [
-              ["Consulta de inventario", "Saldos de inventario", "Consultar existencias por artículo, ubicación o LPN."],
-              ["Almacenamientos ubicaciones", "Catálogo de layouts", "Buscar y configurar ubicaciones del almacén."],
-              ["Monitor de acciones", "Torre de control", "Ver documentos, acciones y estados en un solo lugar."],
-              ["Toma física", "Planificación y seguimiento de conteos", "Crear planes de conteo y revisar diferencias."],
-              ["Acciones automáticas PICK", "Restablecimiento (REPI)", "Reponer picking según puntos de reorden."],
-              ["Recursos", "Operadores & roles", "Usuarios, perfiles y permisos del HH."],
-              ["Recepción y expedición", "Documentos en torre de control", "Seguir el ciclo completo del documento."],
-              ["Carga camión", "Carga camión en HH + Choferes y camiones", "Asignar camión y despachar los palets."],
+              ["Torre de control", "Seguimiento de documentos, acciones, estados e integración a SAP.", "eLC Web."],
+              ["Recepción", "Seguimiento y ejecución de la recepción.", "Torre de control y Hand Held."],
+              ["Almacenaje / Putaway", "Seguimiento de tareas UBRE/UBCO y ubicación física.", "Torre de control y Hand Held."],
+              ["Alisto y expedición", "Preparación del pedido y seguimiento de la expedición.", "Hand Held y Torre de control."],
+              ["Reabastecimiento", "Reposición de ubicaciones de picking según el punto de reorden.", "Restablecimiento y Hand Held."],
+              ["Inventario y conteos", "Consulta de saldos, trazabilidad y seguimiento de conteos.", "eLC Web."],
+              ["Catálogos y seguridad", "Configuración de SKU, layouts, operadores, roles y etiquetas.", "eLC Web."],
+              ["Empaque y carga", "ePacking cuando aplica y carga de camión.", "ePacking y Hand Held, según la operación."],
             ],
           },
           {
             t: "note",
-            title: "La lógica se mantiene",
-            x: "Siguen existiendo documentos, acciones, recursos, zonas, ubicaciones, LPN y trabajos automáticos como UBRE, UBCO, PICK, EXCO y EXES. Lo que cambia es la pantalla desde la que se administran y la forma de asignarlos.",
+            title: "Elementos propios de los flujos de eLC",
+            x: "En los procesos descritos aparecen documentos, acciones, recursos, zonas, ubicaciones, LPN y tipos de trabajo como UBRE, UBCO, PICK, EXCO y EXES. Su uso debe interpretarse dentro del flujo de eLC y de la configuración vigente del cliente.",
           },
           {
             t: "warn",
@@ -50,7 +50,7 @@
           {
             t: "tip",
             title: "Cómo usar esta guía",
-            x: "Si vienes de eWMS, lee primero esta página y luego “Estados de un documento”. Si vas a operar el HH, ve directo a Recepción, Almacenaje, Alisto y Carga.",
+            x: "Empieza por el flujo que vas a ejecutar y consulta después las pantallas que intervienen. Para el trabajo operativo, sigue los pasos documentados y verifica los estados que muestra eLC.",
           },
         ],
       },
@@ -156,23 +156,22 @@
         blocks: [
           {
             t: "p",
-            x: "El HH no guarda la conexión a la base de datos: la pide al API. Para apuntar un HH a otro cliente se cambia la cadena de conexión del API, se encripta y se reinicia el servicio. Es una operación sensible: un error deja el HH sin operación o, peor, apuntando al cliente equivocado.",
+            x: "El Hand Held necesita comunicarse con el servicio/API correspondiente al cliente y al ambiente. La ruta, el mecanismo de configuración y el procedimiento de cambio dependen del despliegue autorizado de eLC; no deben suponerse ni copiarse de otras instalaciones.",
           },
           {
             t: "steps",
             items: [
-              ["Abre la carpeta del API", "Localiza la carpeta del API del cliente y abre el archivo appsettings.json con un editor de texto. Haz una copia de respaldo antes de tocarlo."],
-              ["Copia la cadena actual", "Copia el valor completo de la conexión. No la pegues en chats, correos ni en este hub."],
-              ["Desencripta", "Abre el desencriptador interno aprobado, pega la cadena y ejecuta el proceso. Copia el resultado solo en un lugar seguro y temporal."],
-              ["Cambia el catálogo", "En la cadena desencriptada busca Initial Catalog=EFLOW_CLIENTE y reemplaza el nombre por la base del cliente correcto. Verifica dos veces el nombre."],
-              ["Vuelve a encriptar", "Pega la cadena modificada en el encriptador, ejecuta y copia la nueva cadena cifrada."],
-              ["Reemplaza y reinicia", "Pega la cadena cifrada en appsettings.json, guarda y reinicia el servicio del API. No dejes la cadena desencriptada en ningún archivo."],
-              ["Prueba en QA", "Abre el HH, inicia sesión y ejecuta una consulta o una recepción de prueba. Confirma que el cliente y el ambiente son los correctos antes de operar."],
+              ["Confirma el cliente y el ambiente", "Identifica si el cambio corresponde a QA o Producción y confirma el cliente con la persona responsable de la implementación."],
+              ["Solicita los datos oficiales de eLC", "Pide al responsable técnico la URL o el mecanismo de conexión correcto para ese ambiente. No uses direcciones ni parámetros tomados de otras instalaciones."],
+              ["Verifica el procedimiento autorizado", "Confirma qué archivo, consola o herramienta se utiliza en esa versión de eLC y quién tiene autorización para realizar el cambio."],
+              ["Respalda antes de intervenir", "La persona autorizada debe guardar un respaldo siguiendo el procedimiento interno. No copies credenciales, cadenas ni tokens a este hub."],
+              ["Valida primero en QA", "Realiza la prueba únicamente con el procedimiento aprobado y confirma que el Hand Held consulta el cliente y ambiente esperados."],
+              ["Documenta el resultado", "Registra la versión, el ambiente, la fecha y el resultado de la validación sin guardar secretos ni direcciones privadas."],
             ],
           },
           {
             t: "code",
-            x: "URL de referencia del API: http://<IP-del-servidor-HH>:8086/api/\nCadena a localizar: Initial Catalog=EFLOW_CLIENTE",
+            x: "Datos que deben confirmarse con la implementación de eLC: URL o mecanismo del servicio por ambiente, archivo o pantalla de configuración, responsable autorizado y procedimiento de validación. No registrar aquí URLs privadas, cadenas de conexión, credenciales ni tokens.",
           },
           {
             t: "warn",
@@ -182,7 +181,7 @@
           {
             t: "danger",
             title: "Nunca compartas la cadena",
-            x: "La cadena contiene usuario y contraseña de base de datos. No la pegues en el chat, en esta página, en Git, en correos ni en capturas. Si sospechas que se expuso, cámbiala con TI.",
+            x: "No pegues cadenas de conexión, usuarios, contraseñas, tokens, llaves ni URLs internas en el hub, en Git, en correos o en capturas. Los cambios de conexión deben realizarlos personas autorizadas con el procedimiento aprobado.",
           },
           {
             t: "tip",
@@ -324,7 +323,7 @@
         blocks: [
           {
             t: "p",
-            x: "La sub-pestaña de Almacenaje/Putaway muestra las tareas de almacenaje que en eWMS se conocían como UBRE y UBCO. Son el puente entre la recepción y la ubicación final del producto.",
+            x: "La sub-pestaña de Almacenaje/Putaway muestra tareas identificadas como UBRE y UBCO. Estas tareas forman parte del proceso documentado de ubicación del producto después de la recepción.",
           },
           {
             t: "kv",

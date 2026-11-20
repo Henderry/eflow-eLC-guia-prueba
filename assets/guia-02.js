@@ -176,14 +176,14 @@
       },
       {
         id: "trabajos-automaticos",
-        title: "Trabajos automáticos y monitor de acciones",
+        title: "Trabajos automáticos en eLC",
         summary: "EXCO, EXES, PICK, REPI, UBRE y UBCO: qué significan y por qué a veces no se generan.",
         tags: ["Picking", "Acciones", "HH"],
         updated: "2026-11-20",
         blocks: [
           {
             t: "p",
-            x: "Los trabajos automáticos son las tareas que eLC crea para que el HH las ejecute. En eWMS se veían en el monitor de acciones; en eLC se consultan desde la torre de control y el HH.",
+            x: "Los trabajos automáticos son tareas que eLC genera para que el Hand Held las ejecute. Su seguimiento se realiza desde las vistas correspondientes de la Torre de control y del HH, según el proceso y el estado.",
           },
           {
             t: "table",

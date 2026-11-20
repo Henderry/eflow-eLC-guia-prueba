@@ -10,13 +10,13 @@
       {
         id: "que-es-repi",
         title: "Qué es el restablecimiento (REPI)",
-        summary: "La pantalla que reemplaza las acciones automáticas PICK de eWMS y trabaja con puntos de reorden.",
+        summary: "Pantalla de eLC para consultar el restablecimiento y los puntos de reorden del picking.",
         tags: ["Restablecimiento", "REPI", "Picking"],
         updated: "2026-11-20",
         blocks: [
           {
             t: "p",
-            x: "El restablecimiento es la pantalla donde se ven y administran las tareas REPI: el trabajo de reponer una ubicación de picking cuando su inventario baja del punto de reorden. En eWMS esto se conocía como acciones automáticas de tipo PICK.",
+            x: "El restablecimiento es la pantalla de eLC donde se consultan y administran las tareas REPI. Estas tareas reponen una ubicación de picking cuando el inventario llega al punto de reorden configurado.",
           },
           {
             t: "p",
@@ -44,8 +44,8 @@
           },
           {
             t: "note",
-            title: "La lógica que se conserva",
-            x: "En eLC no se configuran “acciones PICK” una por una como en eWMS: se configuran puntos de reorden. El sistema busca en el almacén indicado si el producto llegó al punto y lo ubica en la ubicación de picking definida.",
+            title: "Funcionamiento del punto de reorden",
+            x: "El proceso documentado utiliza puntos de reorden asociados a ubicaciones de picking. Cuando corresponde, eLC genera una tarea REPI para reponer producto desde una ubicación de almacenaje, de acuerdo con la configuración del cliente.",
           },
           {
             t: "warn",
@@ -151,7 +151,7 @@
         blocks: [
           {
             t: "p",
-            x: "Saldos de inventario es el equivalente a la consulta de inventario de eWMS. Sirve para ver el inventario existente en el almacén mediante diferentes filtros.",
+            x: "Saldos de inventario permite consultar las existencias registradas en eLC mediante los filtros disponibles, como artículo, ubicación o LPN.",
           },
           {
             t: "table",
@@ -274,13 +274,13 @@
       {
         id: "conteos",
         title: "Planificación y seguimiento de conteos",
-        summary: "Planes de reconteo, rutas, zona virtual de diferencias y reportes heredados de eWMS.",
+        summary: "Planes de conteo, rutas y revisión de diferencias de inventario en eLC.",
         tags: ["Conteos", "Inventario", "Toma física"],
         updated: "2026-11-20",
         blocks: [
           {
             t: "p",
-            x: "La pantalla de Planificación y Seguimiento de Conteos permite generar un plan de reconteo, recontar cada ruta y revisar las diferencias entre el material contado y el teórico. Reemplaza la toma física de eWMS.",
+            x: "La pantalla de Planificación y Seguimiento de Conteos permite crear planes, ejecutar o revisar rutas de conteo y consultar las diferencias entre las cantidades contadas y las cantidades teóricas registradas en eLC.",
           },
           {
             t: "steps",
@@ -295,8 +295,8 @@
           },
           {
             t: "note",
-            title: "Reportes heredados",
-            x: "La pestaña también concentra reportes que ya existían en eWMS. Confirma cuáles siguen vigentes y con qué nombre aparecen en la versión del cliente.",
+            title: "Alcance documentado",
+            x: "Esta guía describe los planes, las rutas y la zona virtual de diferencias que aparecen en el material disponible de eLC. Otras opciones o reportes deben documentarse solo después de verificarlos en la versión del cliente.",
           },
           {
             t: "warn",
