@@ -1,123 +1,103 @@
 # eLC Operations Hub
 
-Centro de conocimiento y operación local para **eLC** y su **Hand Held (HH)**. Reúne una guía paso a paso, fichas de clientes, dudas de soporte, fallos y mejoras, problemas frecuentes, glosario y minutas en una sola página.
+Centro de conocimiento y apoyo a la operación de **eLC**, un complemento de SAP con capacidades acotadas de mini-WMS. Su función es apoyar y conectar determinados procesos de almacén con SAP, según los módulos habilitados y la configuración de cada cliente.
 
-> Uso interno ePRAC. El contenido parte de `eLC.docx`, `Flujo general de trabajo ePrac WEB.docx`, `Anotaciones.txt`, `Conexion HH.txt`, `Reporte de fallos eLC.docx`, `Mejoras eLC.docx` y el documento maestro del ePRAC Hub. Valida siempre contra la versión de eLC del cliente antes de cambiar algo en producción.
+> **Alcance:** este hub documenta únicamente pantallas, procesos, términos e integraciones propios de eLC que aparecen en la documentación disponible. No representa a eLC como un WMS general ni le atribuye funciones que no estén documentadas. No sustituye a SAP.
 
-## Cómo abrirla
+## Cómo abrirlo
 
 No necesita instalación, build ni servidor.
 
-1. Abre `index.html` con doble clic (Chrome, Edge o Firefox).
-2. Si el navegador bloquea alguna función, sirve la carpeta con un servidor local:
+1. Abre `index.html` con doble clic en Chrome, Edge o Firefox.
+2. Si el navegador restringe alguna función, sirve la carpeta con un servidor local:
 
    ```powershell
-   # Opción con Python
    python -m http.server 8080
-
-   # Opción con Node (si tienes npx)
-   npx http-server . -p 8080
    ```
 
    Luego abre `http://localhost:8080`.
 
-Los datos se guardan en el `localStorage` del navegador con la clave `elc-hub-v1`. Son **por navegador y por equipo**: no se sincronizan solos.
+Los datos de clientes, dudas, fallos, mejoras, minutas y avance se guardan en el `localStorage` del navegador mediante la clave `elc-hub-v1`. Son datos locales por navegador y equipo; no se sincronizan entre usuarios.
 
 ## Qué incluye
 
 | Sección | Para qué sirve |
 | --- | --- |
-| Panel | Resumen de avance, flujo eLC, pendientes y actividad reciente. |
-| Guía eLC | 10 capítulos con propósito, pasos, resultado esperado, puntos críticos y errores. |
-| Clientes | Fichas con ambientes, VPN, componentes, versiones, enlaces y bitácora. |
-| Dudas | Preguntas abiertas con prioridad, responsable, cliente y respuestas. |
-| Fallos y mejoras | Registro con código, versión, reproducción, impacto y estado. |
-| Problemas | Base de diagnóstico: síntoma, causas, solución y verificación. |
-| Glosario | Términos de eLC, eWMS y logística. |
-| Minutas | Reuniones, decisiones y compromisos con checklist. |
-| Ajustes y datos | Respaldo JSON, importación, reinicio y política de seguridad. |
+| Panel | Resumen de avance, flujos documentados, pendientes y actividad reciente. |
+| Guía eLC | Capítulos con propósito, pasos, resultado esperado, puntos críticos y límites conocidos. |
+| Clientes | Fichas de configuración por cliente, ambientes, componentes, versiones y bitácora. |
+| Dudas | Preguntas abiertas con prioridad, responsable y respuesta documentada. |
+| Fallos y mejoras | Registro de incidencias, reproducción, impacto, versión y seguimiento. |
+| Problemas | Diagnósticos de referencia, diferenciando lo confirmado de lo pendiente de validar. |
+| Glosario | Términos y siglas que aparecen en eLC, en su operación o en su integración con SAP. |
+| Minutas | Reuniones, decisiones y compromisos. |
+| Ajustes y datos | Respaldo JSON, importación, reinicio y avisos de seguridad. |
 
 Atajos: `Ctrl + K` o `/` abre la búsqueda global; `Esc` cierra modales.
 
 ## Estructura de archivos
 
 ```
-index.html                  Estructura de la página y orden de scripts
+index.html
 assets/
-  styles.css                Diseño, componentes y estilos de impresión
-  data.js                   Metadatos, flujo y pendientes por confirmar
-  guia-01.js … guia-04.js   Contenido de la guía por capítulos
-  glosario.js               Términos del glosario
-  problemas.js              Base de problemas frecuentes
-  datos-iniciales.js        Plantilla de cliente y datos de ejemplo
-  app.js                    Núcleo: rutas, panel, guía, búsqueda, ajustes
-  app-clientes.js           Clientes y bitácora
-  app-soporte.js            Dudas, fallos/mejoras y minutas
-  app-problemas.js          Problemas y glosario
+  styles.css
+  data.js
+  guia-01.js … guia-04.js
+  glosario.js
+  problemas.js
+  datos-iniciales.js
+  app.js
+  app-clientes.js
+  app-soporte.js
+  app-problemas.js
 ```
 
-### Orden de carga
-
-`data.js` → contenido (`guia-*.js`, `glosario.js`, `problemas.js`, `datos-iniciales.js`) → módulos de pantalla (`app-*.js`) → `app.js`.
-
-Si agregas un archivo nuevo, inclúyelo en `index.html` antes de `app.js`.
+Orden de carga: `data.js` → contenido de la guía y datos de referencia → módulos de pantalla → `app.js`.
 
 ## Cómo editar el contenido
 
-- **Guía:** agrega un objeto al arreglo del capítulo en `assets/guia-0N.js`. Los bloques disponibles son `p`, `h`, `h3`, `note`, `tip`, `warn`, `danger`, `steps`, `list`, `ol`, `kv`, `table`, `flow`, `code` y `quote`.
-- **Problemas:** agrega un objeto a `assets/problemas.js` con `id`, `process`, `title`, `symptom`, `cause`, `solution`, `verify`, `tags`, `status` y `source`.
-- **Glosario:** agrega `{ term, cat, def }` en `assets/glosario.js`.
-- **Datos iniciales:** edita `assets/datos-iniciales.js`. Solo se aplican a un navegador sin datos guardados; si ya existe información local, usa Ajustes → Importar o borra los datos locales.
-- **Clientes, dudas, fallos, mejoras y minutas:** se crean desde la interfaz y quedan en `localStorage`.
+- **Guía eLC:** agrega o modifica artículos en `assets/guia-0N.js`.
+- **Problemas:** usa `assets/problemas.js`. Distingue siempre los diagnósticos confirmados de las causas posibles.
+- **Glosario:** agrega términos que aparezcan en pantallas o procedimientos de eLC, o que sean necesarios para entender su integración con SAP.
+- **Datos iniciales:** edita `assets/datos-iniciales.js`. Se cargan como ejemplos cuando el navegador todavía no tiene información guardada.
+- **Clientes, dudas, fallos, mejoras y minutas:** se crean desde la interfaz y quedan en el navegador local.
 
-Regla editorial: separa lo **confirmado** de lo **pendiente**. Si un comportamiento no está documentado, regístralo como duda y no lo presentes como regla general.
+### Regla editorial
+
+Cada afirmación operativa debe poder vincularse con una pantalla, una guía, una captura o un prueba registrada de eLC. Si algo no está comprobado, identifícalo como **pendiente de validar**. No se deben importar equivalencias, procesos, códigos, consultas SQL ni procedimientos de otras aplicaciones.
 
 ## Respaldo y restauración
 
 1. Abre **Ajustes y datos**.
-2. Pulsa **Exportar respaldo**. Se descarga un JSON con clientes, dudas, registros, minutas y avance de lectura.
-3. Para restaurar, pulsa **Importar** y elige el archivo. La importación **reemplaza** los datos locales.
+2. Pulsa **Exportar respaldo** para descargar un JSON.
+3. Para restaurar, pulsa **Importar** y selecciona el archivo. La importación reemplaza los datos locales actuales.
 
-Haz un respaldo antes de limpiar el navegador, cambiar de equipo o borrar datos del sitio. El avance de lectura también se pierde si limpias el almacenamiento.
+Haz un respaldo antes de limpiar el navegador o cambiar de equipo.
 
-## Seguridad
+## Seguridad y publicación
 
-Este hub es local y no tiene autenticación. Por eso:
+Este hub es una aplicación estática local y no tiene autenticación ni permisos multiusuario. El repositorio no debe contener datos reales de clientes, contraseñas, tokens, cadenas de conexión, IP privadas, URLs internas ni capturas con información confidencial.
 
-- **No guardes** contraseñas, cadenas de conexión, llaves, tokens ni datos personales sensibles.
-- **No publiques** la carpeta con datos reales en un repositorio, hosting público o sitio sin autenticación.
-- Para secretos usa el gestor aprobado por TI.
-- Si vas a compartir el hub, comparte solo la versión sin datos reales (o exporta/importa fichas anonimizadas).
+Antes de compartir datos operativos reales, se necesita una solución aprobada por la organización que contemple autenticación, permisos por usuario/grupo, almacenamiento seguro, auditoría y tratamiento de adjuntos. Mientras eso no exista, utiliza datos anonimizados y mantén la información sensible fuera del repositorio.
 
-Antes de publicarlo con datos de clientes se necesita, como mínimo:
+## Pendientes documentales
 
-1. Autenticación y permisos por grupo.
-2. Base de datos con RLS (por ejemplo Supabase/PostgreSQL).
-3. Almacenamiento privado para adjuntos con URLs firmadas.
-4. Registro de auditoría de cambios.
+Se mantienen como pendientes, hasta contar con evidencia de eLC y validación del responsable:
 
-Mientras eso no exista, el hub debe quedarse en local o en una carpeta controlada.
-
-## Contenido confirmado y pendientes
-
-La guía distingue dos niveles:
-
-- **Confirmado:** coincide con las fuentes y con el flujo operativo conocido de eLC.
-- **Por confirmar:** aparece marcado en el panel, en problemas o en las dudas. No debe usarse como procedimiento oficial hasta validarlo con el cliente o con el equipo de eLC.
-
-Pendientes importantes ya registrados: ruta exacta del API y del encriptador del HH, semántica de códigos de ubicación, definición oficial de LPN, alcance del Kardex, validación de coordenadas/buscadores en la web, palets bloqueados de Pastas Roma, comportamiento de ePacking por cliente y campos exactos del punto de reorden.
+- Ruta y configuración autorizada del servicio/API del Hand Held por cliente y ambiente.
+- Significado exacto de los códigos de ubicación utilizados en cada instalación.
+- Definición y reglas exactas del LPN en eLC.
+- Alcance y procedimiento de la pantalla Libro Diario de Kardex Contable.
+- Validación de coordenadas y comportamiento de los buscadores.
+- Reglas de almacenamiento para palets bloqueados, según la configuración del cliente.
+- Condiciones de uso de ePacking en cada operación.
+- Campos y criterios exactos del punto de reorden.
 
 ## Limitaciones conocidas
 
 - Los datos no se comparten entre navegadores ni usuarios.
-- No hay adjuntos ni historial de versiones.
-- La impresión genera una ventana con la guía; el PDF se guarda desde el diálogo del navegador.
-- El buscador global indexa contenido local; no consulta eLC ni SAP.
+- No hay autenticación, permisos multiusuario, adjuntos ni historial de versiones.
+- El buscador indexa el contenido local; no consulta eLC ni SAP.
+- La impresión abre el diálogo del navegador; el usuario decide si guarda el documento como PDF.
 
-## Próximos pasos sugeridos
-
-1. Validar y cerrar las dudas marcadas como abiertas.
-2. Reemplazar la plantilla de cliente por fichas reales (sin secretos).
-3. Cargar los problemas confirmados en el flujo de soporte.
-4. Definir autenticación y RLS antes de publicar.
-5. Migrar el contenido a una base de datos cuando el modelo esté estable.
+Este hub es documentación de apoyo. La operación real debe seguir los procedimientos aprobados y la configuración vigente de eLC para cada cliente y versión.
