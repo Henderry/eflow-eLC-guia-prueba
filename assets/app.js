@@ -474,7 +474,7 @@ function renderPanel() {
         ${quickCard('help', 'Dudas', 'Preguntas abiertas, respuestas y responsables.', 'dudas')}
         ${quickCard('bug', 'Fallos y mejoras', 'Registro real con versión, estado y seguimiento.', 'registro')}
         ${quickCard('wrench', 'Problemas', 'Checklists para diagnosticar sin adivinar.', 'problemas')}
-        ${quickCard('alpha', 'Glosario', 'Términos de eLC, eWMS y logística.', 'glosario')}
+        ${quickCard('alpha', 'Glosario', 'Términos y siglas de eLC y su integración con SAP.', 'glosario')}
       </div>
     </section>`;
 }
