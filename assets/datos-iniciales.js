@@ -149,7 +149,7 @@
       client: "Cliente de referencia (anonimizado)",
       category: "Conceptos",
       owner: "Operación",
-      tags: ["IPD", "Pastas Roma"],
+      tags: ["IPD", "Definición por validar"],
       replies: [
         {
           date: "2026-11-20",
