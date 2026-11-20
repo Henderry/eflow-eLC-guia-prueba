@@ -1,0 +1,77 @@
+name: Temporary eLC guide extraction
+on:
+  push:
+    branches:
+      - inspect-elc-word
+permissions:
+  contents: write
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Extract Word text and media
+        run: |
+          python -m pip install --quiet python-docx
+          python - <<'PY'
+          from docx import Document
+          from pathlib import Path
+          from zipfile import ZipFile
+          import re
+
+          source = Path("eLC.docx")
+          doc = Document(source)
+          out = ["# eLC — Texto extraído del documento fuente", ""]
+          for block in doc.element.body:
+              tag = block.tag.split("}")[-1]
+              if tag == "p":
+                  from docx.text.paragraph import Paragraph
+                  p = Paragraph(block, doc)
+                  value = p.text.strip()
+                  if value:
+                      style = (p.style.name or "").lower()
+                      if "title" in style:
+                          out += ["# " + value, ""]
+                      elif "heading 1" in style:
+                          out += ["## " + value, ""]
+                      elif "heading 2" in style:
+                          out += ["### " + value, ""]
+                      else:
+                          out += [value, ""]
+              elif tag == "tbl":
+                  from docx.table import Table
+                  t = Table(block, doc)
+                  rows = [[c.text.strip().replace("\n", "<br>") for c in row.cells] for row in t.rows]
+                  if rows:
+                      width = max(len(x) for x in rows)
+                      out += ["| " + " | ".join((x + [""] * width)[:width]) + " |"]
+                      out += ["| " + " | ".join(["---"] * width) + " |"]
+                      for row in rows:
+                          out += ["| " + " | ".join((row + [""] * width)[:width]) + " |"]
+                      out += [""]
+          text = "\n".join(out)
+          Path("eLC-source-extracted.md").write_text(text, encoding="utf-8")
+          media_dir = Path("eLC-source-media")
+          media_dir.mkdir(exist_ok=True)
+          with ZipFile(source) as z:
+              media = [n for n in z.namelist() if n.startswith("word/media/") and not n.endswith("/")]
+              for name in media:
+                  target = media_dir / Path(name).name
+                  target.write_bytes(z.read(name))
+          Path("eLC-source-media/README.txt").write_text(
+              "\n".join([f"Extracted {len(media)} embedded assets from eLC.docx"] + [Path(n).name for n in media]),
+              encoding="utf-8"
+          )
+          print(f"Paragraphs and tables extracted to eLC-source-extracted.md; media files: {len(media)}")
+          print(text[:50000])
+          PY
+      - name: Commit extracted review copy
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add eLC-source-extracted.md eLC-source-media
+          git commit -m "Temporary: extract eLC guide for review"
+          git push
